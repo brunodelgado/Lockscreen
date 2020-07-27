@@ -31,17 +31,25 @@ struct ContentView: View {
 }
 
 struct TopView: View {
-    @State var currentDate = Date()
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State private var time: String = ""
+    @State private var day: String = ""
+    @State private var currentDate = Date() {
+        didSet {
+            self.time = TopView.timeFormatter.string(from: currentDate)
+            self.day = TopView.dayFormatter.string(from: currentDate)
+        }
+    }
+
+    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
-    var timeFormatter: DateFormatter {
+    private static var timeFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.locale = Locale.current
         formatter.dateFormat = "HH:mm"
         return formatter
     }
     
-    var dayFormatter: DateFormatter {
+    private static var dayFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.locale = Locale.current
         formatter.dateFormat = "EEEE, d MMMM"
@@ -56,14 +64,14 @@ struct TopView: View {
                 .padding(.bottom)
                 .foregroundColor(.white)
             
-            Text(timeFormatter.string(from: currentDate) ?? "")
+            Text(time)
                 .font(Font.system(size: 80, weight: .thin))
                 .foregroundColor(Color.white)
                 .onReceive(timer) { input in
                     self.currentDate = input
                 }
             
-            Text(dayFormatter.string(from: currentDate) ?? "")
+            Text(day)
                 .font(Font.system(size: 22))
                 .foregroundColor(.white)
                 .onReceive(timer) { input in
@@ -103,10 +111,7 @@ struct BottomView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
-            .environment(\.colorScheme, .light)
-        
-        ContentView()
-            .environment(\.colorScheme, .dark)
+        ContentView().environment(\.colorScheme, .light)
+        //ContentView().environment(\.colorScheme, .dark)
     }
 }
