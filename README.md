@@ -1,5 +1,5 @@
 # Lockscreen
-iPhone and iPad lockscreen recreation using SwiftUI
+iPhone and iPad iOS 14 lockscreen recreation using SwiftUI 2.
 
 ![](Screenshots/iPhone-light.png)
 ![](Screenshots/iPhone-dark.png)
